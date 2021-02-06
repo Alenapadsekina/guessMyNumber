@@ -2,31 +2,29 @@
 <html lang="eng">
   <head>
     <link rel="stylesheet" href="styles.css" />
-    <script src="script.js"></script>
   </head>
 
   <body>
     <header>
-        <button id="replay-button" class="child">Again!</button>
-        <span id="rules" class="child">(between 1 and 20)</span>
-        <h1 id="game-title">GUESS MY NUMBER!</h1>
-        <h1 id="correct-answer">ANSWER</h1>
+      <button id="replay-button" class="child">Again!</button>
+      <span id="rules" class="child">(between 1 and 30)</span>
+      <h1 id="game-title">GUESS MY NUMBER!</h1>
+      <h1 id="correct-answer">?</h1>
     </header>
     <main>
-        <div id="gameplay">
-            <section id="user-guess" сlass="child">
-              <p>[PLACEHOLDER]</p>
-              <p><button id="check-button">Check!</button></p>
-            </section>
-          
-            <section id="statistics" сlass="child">
-              <p id="message">Start guessing...</p>
-              <p>Score: <span id="score"></span></p>
-              <p>Highscore: <span id="highscore"></span></p>
-            </section>
+      <div id="gameplay">
+        <section сlass="child">
+          <input id="user-guess" type="number" />
+          <button id="check-button">Check!</button>
+        </section>
+
+        <section id="statistics" сlass="child">
+          <p id="message" class="message">Start guessing...</p>
+          <p>Score: <span id="score"></span></p>
+          <p>Highscore: <span id="highscore"></span></p>
+        </section>
+        <script src="script.js"></script>
+      </div>
     </main>
   </body>
 </html>
-
-
-
