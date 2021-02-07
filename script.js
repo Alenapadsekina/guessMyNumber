@@ -1,68 +1,79 @@
 "use strict";
-let maxNumber = 5;
+let maxNumber = 20;
 let minNumber = 1;
-//let myNumber = 7;
 let myNumber = Math.trunc(Math.random() * maxNumber) + 1;
 console.log(myNumber);
 let score = maxNumber;
 let highscore = 0;
 
+function changeRecord(element, record) {
+  document.querySelector(element).textContent = record;
+}
+changeRecord("#highscore", highscore);
+function disableButton(button, value) {
+  document.querySelector(button).disabled = value;
+}
 // set the rules and scores
-document.querySelector(
-  "#rules"
-).textContent = `(between ${minNumber} and ${maxNumber})`;
-document.querySelector("#score").textContent = score;
-document.querySelector("#highscore").textContent = highscore;
-
-function gameOver() {
-  document.querySelector("#game-title").textContent = "GAME OVER";
-  document.querySelector("body").style.backgroundColor = "#DC143C";
-  document.querySelector("#check-button").disabled = true;
+function startGame() {
+  disableButton("#check-button", false);
+  changeRecord("#message", "⌛ Start guessing...");
+  changeRecord("#correct-answer", "?");
+  changeRecord("#game-title", "Guess my number!");
+  score = maxNumber;
+  changeRecord("#score", score);
+  document.querySelector("#user-guess").value = null;
+  document.querySelector("body").style.backgroundColor = "#000000";
+  document.querySelector(
+    "#rules"
+  ).textContent = `(between ${minNumber} and ${maxNumber})`;
 }
 
-// click Check button
+startGame();
+
+function gameOver() {
+  changeRecord("#game-title", "GAME OVER");
+  document.querySelector("body").style.backgroundColor = "#DC143C";
+  disableButton("#check-button", true);
+}
+
+// click Check button V2
 document.querySelector("#check-button").addEventListener("click", function () {
   let guess = Number(document.querySelector("#user-guess").value);
-  //if there's no value
+  // NO NUMBER
   if (guess == null) {
-    document.querySelector("#message").textContent = "No number!";
-    document.querySelector("body").style.backgroundColor = "#000000";
+    changeRecord("#message", "No number!");
   } else {
+    // CAN PLAY
     if (score > 0) {
-      // if the value is out of the range
-      if (guess < minNumber || guess > maxNumber) {
-        document.querySelector("#message").textContent = "Invalid number!";
+      // INCORRECT NUMBER
+      if (guess !== myNumber) {
+        changeRecord(
+          "#message",
+          guess < minNumber || guess > maxNumber
+            ? "⛔ Invalid number"
+            : guess > myNumber
+            ? "📈 Too high!"
+            : "📉 Too low!"
+        );
+
         document.querySelector("#user-guess").value = null;
         score--;
-        document.querySelector("#score").textContent = score;
-        document.querySelector("body").style.backgroundColor = "#000000";
-        if (score == 0) gameOver();
-      } else {
-        // player wins
+        changeRecord("#score", score);
 
-        if (guess === myNumber) {
-          document.querySelector("#message").textContent = "Correct!";
-          document.querySelector("#correct-answer").textContent = guess;
-          if (score > highscore) {
-            highscore = score;
-          }
-          document.querySelector("#highscore").textContent = highscore;
-          document.querySelector("body").style.backgroundColor = "#60b347";
-          document.querySelector("#correct-answer").width = "30 rem";
-          document.querySelector("#check-button").disabled = true;
-        } else {
-          if (guess > myNumber) {
-            document.querySelector("#message").textContent = "Too high!";
-          } else if (guess < myNumber) {
-            document.querySelector("#message").textContent = "Too low!";
-          }
-          score--;
-          document.querySelector("#score").textContent = score;
-          document.querySelector("#user-guess").value = null;
-          if (score == 0) gameOver();
+        if (score == 0) gameOver();
+        // CORRECT NUMBER
+      } else if (guess === myNumber) {
+        changeRecord("#message", "⭐ Correct!");
+        changeRecord("#correct-answer", guess);
+        if (score > highscore) {
+          highscore = score;
         }
+        changeRecord("#highscore", highscore);
+        document.querySelector("body").style.backgroundColor = "#60b347";
+        document.querySelector("#correct-answer").width = "30 rem";
+        disableButton("#check-button", true);
       }
-      //player loses
+      // CAN NOT PLAY
     } else {
       gameOver();
     }
@@ -74,12 +85,5 @@ document.querySelector("#check-button").addEventListener("click", function () {
 document.querySelector("#replay-button").addEventListener("click", function () {
   myNumber = Math.trunc(Math.random() * maxNumber) + 1;
   console.log(myNumber);
-  score = maxNumber;
-  document.querySelector("#check-button").disabled = false;
-  document.querySelector("#message").textContent = "Start guessing...";
-  document.querySelector("#correct-answer").textContent = "?";
-  document.querySelector("#game-title").textContent = "Guess my number!";
-  document.querySelector("#score").textContent = score;
-  document.querySelector("#user-guess").value = null;
-  document.querySelector("body").style.backgroundColor = "#00CED1";
+  startGame();
 });
